@@ -1,0 +1,22 @@
+body {
+    background: #00E7DC;
+    margin:0; 
+    padding:0; 
+    overflow:hidden
+  }
+  
+  #cl {
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+    padding: 2em 0 0;
+   font-weight: bolder;
+   color: red;
+  }
+  
+  svg {
+    position:fixed; 
+    bottom:0; 
+    left:0;
+    height: 100%;
+    width:100%
+  }

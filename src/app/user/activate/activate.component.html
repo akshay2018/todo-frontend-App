@@ -1,0 +1,29 @@
+<div class="container-fluid background-image" *ngIf = "siteFound==true">
+    <div class="container">
+        <img class="center" id="im" src="../../../assets/banner.png"> 
+     </div>
+  <div class="row h-100">
+    <div class="col align-self-center modal-dialog">
+      <div class="modal-content modal-dialog">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <h1>Real-Time TODO List</h1>
+            </div>
+          </div>
+          
+          <div class="row modal-body">
+            <div class="col">
+              <h1 class="d-flex justify-content-center">Account Activated</h1>
+              <div class="modal-footer container">
+                <div class="col">
+                  Click <a [routerLink]="['/login']">here</a> to start login.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

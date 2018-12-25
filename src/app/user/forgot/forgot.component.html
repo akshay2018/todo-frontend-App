@@ -1,0 +1,38 @@
+<div class="container-fluid background-image">
+    <div class="container">
+        <img class="center" id="im" src="../../../assets/banner.png"> 
+     </div>
+   
+  <div class="row h-100">
+    <div class="col align-self-center modal-dialog">
+      <div class="modal-content modal-dialog">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <h3 class="modal-title"><i class="fa fa-lock"></i> Forgotten Password</h3>
+            </div>
+          </div>
+         
+          <div class="row modal-body">
+            <div class="col">
+              <form #emailUser="ngForm" (ngSubmit)="emailFunction(emailUser)">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input name='email' ngModel type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="Enter email" required>
+                  <small id="emailHelp" class="form-text text-muted">Provide e-mail credentials of the forgotten password.</small>
+                </div>
+                <div class="modal-footer container">
+                  <div class="col">
+                    <a [routerLink]="['/login']">&lt;&lt;&nbsp;Back to Login</a>
+                  </div>
+                  <button type="submit" class="btn btn-success" [disabled]="!emailUser.form.valid">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

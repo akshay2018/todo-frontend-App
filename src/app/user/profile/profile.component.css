@@ -1,0 +1,82 @@
+#im {
+    max-width: 250px;
+    max-height: 250px;
+    margin-left: -15px;
+    
+    }
+.full-height{
+    height:88.7vh;
+    overflow-y : auto;
+}
+.margin-bottom{
+    margin-bottom:10px;
+}
+.purple-bg{
+    background-color:#292633;
+}
+.margin{
+    margin:10px;
+}
+
+.card {
+    border-radius: 3.25rem;
+}
+
+.link{
+    cursor: pointer;
+}
+.link:hover {
+    text-decoration: underline;
+}
+.gray-bg{
+    background-color: #D3D3D3;
+}
+.circle{
+    border-radius: 50%;
+    width:32px;
+    height:32px;
+    color:#000000;
+    padding:4px;
+    text-align: center;
+    position: absolute;
+    right: 0px;
+    z-index:1;
+}
+.friend-icon{
+    min-height:50px;
+    cursor:pointer;
+}
+.crop {
+    border-radius: 100%;
+    text-align: center;
+    padding:0.5em;
+    width: 2.5em;
+    height: 2.5em;
+    text-transform: uppercase;
+}
+.fa{
+    cursor: pointer;
+}
+.border-success{
+    background-color: #E1FFD3;
+}
+.list-group-item, .list-group-item:hover{ z-index: auto; }
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}

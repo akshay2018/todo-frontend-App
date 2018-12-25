@@ -1,0 +1,112 @@
+<div class="container-fluid background-image">
+    <div class="container">
+        <img class="center" id="im" src="../../../assets/banner.png"> 
+     </div>
+   
+<div class="container">
+  <div class="row">
+    <div class="col s8 ">
+      <div class="card grey lighten-2">
+        <div class="card-tabs">
+          <ul class="tabs tabs-fixed-width tabs-transparent">
+            <li class="tab">
+              <a routerLink='/login'>Sign In</a>
+            </li>
+            <li class="tab">
+              <a  routerLink='/signup' routerLinkActive='active'>Sign Up</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-content white">
+          <div class="row">
+            <div class="col s12 white">
+                <div class="row">
+                    <div class="input-field col s6">
+                      <input type="text" [(ngModel)]='firstName' #firstNameText="ngModel" class="form-control" id="exampleInputfirstName1" 
+                      required>
+                      <label>First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                      <input  type="text" class="form-control" #lastNameText="ngModel" [(ngModel)]='lastName' id="exampleInputlastName1" required>
+                      <label>Last Name</label>
+                    </div>
+                  </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <input type="password" [(ngModel)]='password' minlength="8" #passwordText="ngModel" class="form-control" id="exampleInputPassword1"
+                   required>
+                   <small [hidden]="passwordText.valid || passwordText.untouched || passwordText.errors?.required" class="form-group text text-danger"
+                  style="margin-left:5px;">
+                  <b>Password must be atleast 8 digit long</b>
+                </small>
+                <small [hidden]="passwordText.errors?.minlength || passwordText.untouched || passwordText.valid" class="form-group text text-danger"
+                  style="margin-left:5px;">
+                  <b>Password is required</b>
+                </small>
+                <label>Password</label>
+                </div>
+                <div class="input-field col s6">
+                    <input type="password" [(ngModel)]='confirmPassword' #confirmPasswordText="ngModel" class="form-control" id="exampleInputPassword2"
+                     (keydown)="$event.keyCode==13?signupFunction():null" required>
+                    <small *ngIf="confirmPasswordText.value!=passwordText.value && confirmPasswordText.dirty" class="form-group text text-danger"
+                      style="margin-left:5px;">
+                      <b>Passwords Doesnt Match</b>
+                    </small>
+                    <small [hidden]="confirmPasswordText.invalid || confirmPasswordText.value!=passwordText.value" class="form-group text text-success"
+                      style="margin-left:5px;">
+                      <b>Passwords Matched</b>
+                    </small> 
+                    <label>Confirm Password</label>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                    <input type="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]='email' #emailText="ngModel" class="form-control"
+                    id="exampleInputEmail1" aria-describedby="emailHelp"  required>
+                    <small [hidden]="emailText.valid || emailText.untouched || emailText.errors?.required" class="form-group text text-danger"
+                  style="margin-left:5px;">
+                  <b>Email format should be <i>example@gmail.com</i>.</b>
+                </small>
+                <small [hidden]="emailText.errors?.pattern || emailText.untouched || emailText.valid" class="form-group text text-danger"
+                  style="margin-left:5px;">
+                  <b>Email id is required</b>
+                </small>
+                <label for="exampleInputEmail1">Email address</label>
+                </div>
+              </div>
+              
+ 
+             <div class="form-group">
+                <div class="row">
+                  <label class="col" for="exampleInputfirstName1">Mobile Number</label>
+                </div>
+                <div class="row no-gutters">
+                  <div class="col-3">
+                    <select (change)="onChange($event.target.value)" class="form-control p-0" required *ngIf="countryNamesArray">
+                      <option selected disable hidden value="">Select</option>
+                      <option *ngFor="let country of countryNamesArray" [value]="country[0]">{{country[1]}}</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-2 col-3 d-flex align-items-center justify-content-end">
+                    <span *ngIf="countryCode">+{{countryCode}}&nbsp;</span>
+                  </div>
+                  <div class="col-lg-7 col-6">
+                    <input type="text" class="form-control" [(ngModel)]='mobileNumber' placeholder="Mobile">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-field col s12">
+                  <button type="submit" [disabled]="password!= confirmPassword" (click)="signupFunction()" class="btn-large btn-submit">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+

@@ -1,0 +1,23 @@
+#clr{
+    color: red; 
+    text-align: center; 
+    font-weight: bolder;
+    font-style: oblique;
+    padding-top: 60px;
+    
+  }
+  #im {
+    max-width: 750px;
+    max-height: 200px;
+    padding-top: 20px;
+    border-radius: 20px;
+    
+    }
+  
+  
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 70%;
+    }

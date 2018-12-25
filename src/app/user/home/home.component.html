@@ -1,0 +1,357 @@
+<div class="container-fluid">
+  <div class="modal fade" id="createListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Create List</h5>
+        </div>
+        <div class="modal-body">
+          <form #createList="ngForm" (ngSubmit)="createListFunction(createList)">
+            <div class="form-group row">
+              <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputTitle" name="title" [(ngModel)]="listTitleField" ngModel required autocomplete="off"
+                  placeholder="List Title">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2">Private</div>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" name="private" type="checkbox" [(ngModel)]="listPrivacyField" ngModel id="gridCheck1">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" [disabled]="!createList.form.valid" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col p-0">
+      <nav class="navbar nav-wrapper navbar-expand-lg navbar-dark" style="background-color: #1E2129;">
+          <a class="navbar-brand" [routerLink]="['/home']">
+              <img id="im" src="../../../assets/banner.png" alt="">
+            </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarNav"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="margin text-white">
+              <input [formControl]="queryField" [(ngModel)]="search" class="form-control mr-sm-2" type="search" placeholder="Search Friends"
+                aria-label="Search"> 
+            </li>
+            <li class="text-white d-flex flex-direction-row align-items-center margin">
+              <div class="d-block d-lg-none">
+                <h5>&nbsp;&nbsp;{{userInfo.fullName}}</h5>
+              </div>
+              <a class="text-white ml-auto" [routerLink]="['/home']">Home</a>
+            </li>
+            <li class="text-white d-flex flex-direction-row align-items-center margin">
+              <div class="d-block d-lg-none">
+                <button type="button" class="btn btn-primary w-100" data-toggle="modal" data-target="#createListModal" (click)="listTitleField='';listPrivacyField=false;">
+                  Create List
+                </button>
+              </div>
+              <div class="text-white ml-auto link" [routerLink]="['/notifications']" style="position:relative; z-index:0;">Notifications<span
+                  *ngIf="notificationCount>0" class="bg-warning circle">{{notificationCount}}</span></div>
+            </li>
+            <li class="text-white d-flex flex-direction-row align-items-center margin">
+              <div class="text-white ml-auto link" (click)="logout()">Logout</div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col p-0">
+      <div class="container-fluid" *ngIf="userInfo">
+        <div class="row">
+          <div id="profile" class="d-lg-block col-lg-2 d-none col-12 purple-bg full-height">
+            <button type="button" class="btn btn-success fa fa-list d-lg-none d-block" (click)="listView()"></button>
+            <div class="row d-none d-lg-block" style="margin-top:20px;">
+              <div class="col text-center">
+                <h4 class="text-light">{{userInfo.fullName}}</h4>
+              </div>
+            </div>
+            <div class="row d-none d-lg-block" style="margin-top:10px;">
+              <div class="container">
+                <button type="button" class="btn btn-primary waves-effect waves-light w-100" data-toggle="modal" data-target="#createListModal" (click)="listTitleField='';listPrivacyField=false;">
+                  Add Task
+                </button>
+              </div>
+            </div>
+            <div class="row text-white" style="margin-top:20px;">
+              <div class="col text-center">
+                <h4>Friends</h4>
+              </div>
+            </div>
+            <div class="container-full" *ngIf="friends!=undefined">
+              <div *ngFor="let friend of friends | slice:0:loadMoreFriends" class="row text-light border-bottom friend-icon">
+                <div class="col-auto d-flex align-items-center w-100" [routerLink]="['/profile',friend.userId]">
+                  <div class="crop bg-primary">{{friend.userName[0]}}</div>
+                  <div class="col">{{friend.userName}}</div>
+                </div>
+              </div>
+              <div class="w-100"></div>
+              <div class="col w-100 text-center text-light" style="cursor:pointer;" (click)="loadMoreFriends=loadMoreFriends+10;" *ngIf="friends.length>loadMoreFriends">See
+                More</div>
+            </div>
+          </div>
+          <div id="list" class="col-lg-10 d-lg-block col-12 d-block full-height gray-bg">
+            <button type="button" class="btn-sm btn-success fa fa-users d-lg-none d-block" (click)="profileView()"></button>
+            <div class="container">
+              <div *ngIf="search" class="row">
+                <div *ngFor="let result of results | slice:0:loadMoreUsers; let i=index;" class="col-lg-4 col-md-6 col-12">
+                  <div class="card margin-bottom">
+                    <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                    <div class="card-body">
+                      <h5 [routerLink]="['/profile',result.userId]" style="cursor:pointer;" class="card-title">{{result.fullName}}</h5>
+                      <p class="card-text">Email: {{result.email}}<br>Contact: +{{result.countryCode}}-{{result.mobileNumber}}</p>
+                      <!-- if searched friend is not self and status is null i.e no request is sent yet then show add friend -->
+                      <a *ngIf="result.userId!==userInfo.userId && result.status===null" class="btn btn-primary text-light" (click)="sendFriendRequest(result.userId,i)">Add
+                        Friend
+                      </a>
+                      <!-- if searched friend is self then show 'You' -->
+                      <a *ngIf="result.userId===userInfo.userId" class="btn btn-success text-light">You</a>
+                      <!-- if status is not null then -->
+                      <div *ngIf="result.status">
+                        <!-- if status is requested and senderId is self then show Request Sent -->
+                        <a *ngIf="result.status.requestStatus==='requested' && result.status.senderId===userInfo.userId" class="btn btn-white text-dark border border-dark">Request
+                          Sent
+                        </a>
+                        <!-- if status is requested and recipientId is self then show Accept and Reject button -->
+                        <a *ngIf="result.status.requestStatus==='requested' && result.status.recipientId===userInfo.userId" class="btn btn-success text-white"
+                          (click)="acceptFriendRequest(result.userId,i)">Accept</a>&nbsp;&nbsp;
+                        <a *ngIf="result.status.requestStatus==='requested' && result.status.recipientId===userInfo.userId" class="btn btn-danger text-white"
+                          (click)="rejectFriendRequest(result.userId,i)">Reject</a>
+                        <!-- if status is accepted then show 'Friends' -->
+                        <a *ngIf="result.status.requestStatus==='accepted'" class="btn btn-white text-dark border border-dark">Friends</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="col w-100 text-center" style="cursor:pointer;" (click)="loadMoreUsers=loadMoreUsers+10;" *ngIf="results.length>loadMoreUsers">See
+                  More</div>
+              </div>
+              <div *ngIf="!search && userLists!==undefined" class="row">
+                <div *ngFor="let list of userLists" class="col-lg-12 col-12" style="padding-top:20px;">
+                  <div class="card margin-bottom" (click)="selectedListId=list.present.listId;selectedListName=list.present.listName;" [ngClass]="(selectedListId==list.present.listId)?'border border-success':null">
+                    <div class="card-body">
+                      <div class="d-flex flex-direction-row">
+                        <div class="col-lg-7 col-6">
+                          <h5 class="card-title">{{list.present.listName}}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted" *ngIf="list.present.private">private</h6>
+                          <h6 class="card-subtitle mb-2 text-muted" *ngIf="!list.present.private">public</h6>
+                        </div>
+                        <div class="col-lg-3 col-6 ml-auto">
+                          <button class="btn btn-warning fa fa-undo" style="border-radius: 80px;" title="undo list" (click)="undoList(list.present.listId,list.present.listName)"></button>
+                          <button class="btn btn-primary fa fa-plus" style="border-radius: 80px;" title="add item" data-toggle="modal" [attr.data-target]="'#createItemModal'+list.present.listId"
+                            (click)="itemTitleField=''"></button>
+                          <div class="modal fade" [id]="'createItemModal'+list.present.listId" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLongTitle">Create Item</h5>
+                                </div>
+                                <div class="modal-body">
+                                  <form>
+                                    <div class="form-group row">
+                                      <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                                      <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputTitle" name="title" [(ngModel)]="itemTitleField" required autocomplete="off"
+                                          placeholder="Item Title">
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                      <button type="submit" [disabled]="!itemTitleField" class="btn btn-primary" (click)="addItem(list.present.listId,list.present.listName,list.present.creatorId,list.present.listId)">Create</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <button class="btn btn-success fa fa-pencil" style="border-radius: 80px;" title="edit list" data-toggle="modal" [attr.data-target]="'#editListModal'+list.present.listId"
+                            (click)="listTitleField=list.present.listName;listPrivacyField=list.present.private;"></button>
+                          <div class="modal fade" [id]="'editListModal'+list.present.listId" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLongTitle">Edit List</h5>
+                                </div>
+                                <div class="modal-body">
+                                  <form>
+                                    <div class="form-group row">
+                                      <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                                      <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="inputTitle" name="title" [(ngModel)]="listTitleField" required autocomplete="off"
+                                          placeholder="List Title">
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <div class="col-sm-2">Private</div>
+                                      <div class="col-sm-10">
+                                        <div class="form-check">
+                                          <input class="form-check-input" name="private" type="checkbox" [(ngModel)]="listPrivacyField" id="gridCheck1">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                      <button type="submit" [disabled]="!listTitleField" class="btn btn-primary" (click)="editListFunction(list.present.listId)">Save</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <button class="btn btn-danger fa fa-trash" style="border-radius: 80px;" title="delete list" data-toggle="modal" [attr.data-target]="'#deleteListModal'+list.present.listId"></button>
+                          <div class="modal fade" [id]="'deleteListModal'+list.present.listId" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLongTitle">Delete List</h5>
+                                </div>
+                                <div class="modal-body">
+                                  Are you sure you want to delete the list? It cannot be undone.
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  <button type="submit" class="btn btn-danger" (click)="deleteListFunction(list.present.listId,list.present.listName,list.present.creatorId)">Delete</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <ul class="card-text list-group list-group-flush" *ngIf="list.present.item">
+                        <li [ngClass]="(item.done===true)?'card-header':'list-group-item'" *ngFor="let item of getFilteredItems(list.present.item,list.present.listId)">
+                          <div class="d-flex flex-direction-row">
+                            <div class="col-lg-9 col-7"><b>{{item.itemName}}</b></div>
+                            <div class="col-lg-3 col-5 ml-auto">
+                              <i class="text-success fa fa-check" title="complete item" [hidden]="item.done" (click)="completeItem(list.present.listId,list.present.listName,item.itemName,item.itemId)"></i>
+                              <i class="text-success fa fa-folder-open" title="open item" [hidden]="!item.done" (click)="openItem(list.present.listId,list.present.listName,item.itemName,item.itemId)"></i>
+                              <i class="text-primary fa fa-plus" title="add subitem" [hidden]="item.done" data-toggle="modal" [attr.data-target]="'#createItemModal'+item.itemId"
+                                (click)="itemTitleField=''"></i>
+                              <div class="modal fade" [id]="'createItemModal'+item.itemId" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Create Item</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form>
+                                        <div class="form-group row">
+                                          <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                                          <div class="col-sm-10">
+                                            <input type="email" class="form-control" id="inputTitle" name="title" [(ngModel)]="itemTitleField" required autocomplete="off"
+                                              placeholder="Item Title">
+                                          </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                          <button type="submit" [disabled]="!itemTitleField" class="btn btn-primary" (click)="addItem(list.present.listId,list.present.listName,list.present.creatorId,item.itemId)">Create</button>
+                                        </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <i class="text-success fa fa-pencil" title="edit subitem" *ngIf="!item.done" data-toggle="modal" [attr.data-target]="'#editItemModal'+item.itemId"
+                                (click)="itemTitleField=item.itemName"></i>
+                              <div class="modal fade" [id]="'editItemModal'+item.itemId" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Edit Item</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form>
+                                        <div class="form-group row">
+                                          <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                                          <div class="col-sm-10">
+                                            <input type="email" class="form-control" id="inputTitle" name="title" [(ngModel)]="itemTitleField" required autocomplete="off"
+                                              placeholder="List Title">
+                                          </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                          <button type="submit" [disabled]="!itemTitleField" class="btn btn-primary" (click)="editItem(list.present.listId,list.present.listName,item.itemId)">Save</button>
+                                        </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <i class="text-danger fa fa-trash" title="delete item" (click)="deleteItem(list.present.listId,list.present.listName,item.itemName,item.itemId)"></i></div>
+                          </div>
+                          <ul class="card-text list-group list-group-flush">
+                            <!-- <li class="list-group-item" *ngFor="let subItem of getFilteredItems(list.present.item,item.itemId)">{{subItem.itemName}}</li> -->
+                            <li [ngClass]="(subItem.done===true)?'card-header':'list-group-item'" *ngFor="let subItem of getFilteredItems(list.present.item,item.itemId)">
+                              <div class="d-flex flex-direction-row">
+                                <div class="col-lg-9 col-7">{{subItem.itemName}}</div>
+                                <div class="col-lg-3 col-5 ml-auto">
+                                  <i class="text-success fa fa-check" title="complete subitem" [hidden]="subItem.done" (click)="completeItem(list.present.listId,list.present.listName,subItem.itemName,subItem.itemId)"></i>
+                                  <i class="text-success fa fa-folder-open" title="open subitem" [hidden]="!subItem.done" (click)="openItem(list.present.listId,list.present.listName,subItem.itemName,subItem.itemId)"></i>
+                                  <i class="text-success fa fa-pencil" title="edit subitem" [hidden]="subItem.done" data-toggle="modal" [attr.data-target]="'#editItemModal'+subItem.itemId"
+                                    (click)="itemTitleField=subItem.itemName"></i>
+                                  <div class="modal fade" [id]="'editItemModal'+subItem.itemId" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLongTitle">Edit Item</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                          <form>
+                                            <div class="form-group row">
+                                              <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                                              <div class="col-sm-10">
+                                                <input type="email" class="form-control" id="inputTitle" name="title" [(ngModel)]="itemTitleField" required autocomplete="off"
+                                                  placeholder="List Title">
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="cancel btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                              <button type="submit" [disabled]="!itemTitleField" class="btn btn-primary" (click)="editItem(list.present.listId,list.present.listName,subItem.itemId)">Save</button>
+                                            </div>
+                                          </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <i class="text-danger fa fa-trash" title="delete subitem" (click)="deleteItem(list.present.listId,list.present.listName,subItem.itemName,subItem.itemId)"></i></div>
+                              </div>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="col w-100 text-center" style="cursor:pointer; padding-bottom: 15px;" (click)="loadMoreLists()" *ngIf="userLists.length>=10">See
+                  More</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="container-fluid background-image">
+    <div class="container">
+        <img class="center" id="im" src="../../../assets/banner.png"> 
+     </div>
+  <div class="row h-100">
+    <div class="col align-self-center modal-dialog">
+      <div class="modal-content modal-dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <h3 class="modal-title"><i class="fa fa-lock"></i> Reset Account Password</h3>
+                </div>
+          </div>
+         
+          <div class="row modal-body">
+            <div class="col">
+              <form #passwordUser="ngForm" (ngSubmit)="passwordReset(passwordUser)">
+                <div class="form-group">
+                  <label for="exampleInputPassword1">New Password</label>
+                  <input name='password' ngModel type="password" #passwordText="ngModel" minlength="8" class="form-control" id="exampleInputPassword1"
+                    placeholder="Enter Password" required>
+                  <small [hidden]="passwordText.valid || passwordText.untouched || passwordText.errors?.required" class="form-group text text-danger"
+                    style="margin-left:5px;">
+                    <b>Password must be atleast 8 digit long</b>
+                  </small>
+                  <small [hidden]="passwordText.errors?.minlength || passwordText.untouched || passwordText.valid" class="form-group text text-danger"
+                    style="margin-left:5px;">
+                    <b>Password is required</b>
+                  </small>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Confirm Password</label>
+                  <input name='confirmPassword' ngModel type="password" #confirmPasswordText="ngModel" class="form-control" id="exampleInputPassword2"
+                    placeholder="Re Enter Password" required>
+                  <small *ngIf="confirmPasswordText.value!=passwordText.value && confirmPasswordText.dirty" class="form-group text text-danger"
+                    style="margin-left:5px;">
+                    <b>Passwords Doesnt Match</b>
+                  </small>
+                  <small [hidden]="confirmPasswordText.invalid || confirmPasswordText.value!=passwordText.value" class="form-group text text-success"
+                    style="margin-left:5px;">
+                    <b>Passwords Matched</b>
+                  </small>
+                </div>
+                <div class="modal-footer container">
+                  <button type="submit" class="btn btn-success" [disabled]="!passwordUser.form.valid || passwordText.value!=confirmPasswordText.value">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

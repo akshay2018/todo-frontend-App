@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col p-0">
+      <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1E2129;">
+          <a class="navbar-brand" [routerLink]="['/home']">
+              <img id="im" src="../../../assets/banner.png" alt="">
+          </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarNav"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="margin text-white">
+              <input [formControl]="queryField" [(ngModel)]="search" class="form-control mr-sm-2" type="search" placeholder="Search Friends" aria-label="Search">
+            </li>
+            <li class="text-white d-flex flex-direction-row align-items-center margin">
+              <div class="d-block d-lg-none">
+                <h5>&nbsp;&nbsp;{{userInfo.fullName}}</h5>
+              </div>
+              <a class="text-white ml-auto" [routerLink]="['/home']">Home</a>
+            </li>
+            <li class="text-white d-flex flex-direction-row align-items-center">
+              <div class="text-white link margin" [routerLink]="['/notifications']">Notifications</div>
+                <div class="text-white ml-auto link margin" (click)="logout()">Logout</div>
+              </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col p-0">
+      <div class="container-fluid" *ngIf="userInfo">
+        <div class="row">
+          <div class="d-lg-block col-lg-2 d-none purple-bg" style="height:100vh;">
+            <div class="row" style="margin-top:20px;">
+              <div class="col text-center text-light">
+                <h4 class="text-light">{{userInfo.fullName}}</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-10 col-12 full-height gray-bg">
+            <div class="container">
+              <div *ngIf="search" class="row">
+              <div *ngFor="let result of results | slice:0:loadMoreUsers; let i=index;" class="col-lg-4 col-md-6 col-12">
+                <div class="card margin-bottom">
+                  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                  <div class="card-body">
+                    <h5 class="card-title" [routerLink]="['/profile',result.userId]" style="cursor:pointer;">{{result.fullName}}</h5>
+                    <p class="card-text">Email: {{result.email}}<br>Contact: +{{result.countryCode}}-{{result.mobileNumber}}</p>
+                    <!-- if searched friend is not self and status is null i.e no request is sent yet then show add friend -->
+                    <a *ngIf="result.userId!==userInfo.userId && result.status===null" class="btn btn-primary text-light" (click)="sendFriendRequest(result.userId,i)">Add Friend</a>
+                    <!-- if searched friend is self then show 'You' -->
+                    <a *ngIf="result.userId===userInfo.userId" class="btn btn-success text-light">You</a>
+                    <!-- if status is not null then -->
+                    <div *ngIf="result.status">
+                    <!-- if status is requested and senderId is self then show Request Sent -->
+                    <a *ngIf="result.status.requestStatus==='requested' && result.status.senderId===userInfo.userId" class="btn btn-white text-dark border border-dark">Request Sent</a>
+                    <!-- if status is requested and recipientId is self then show Accept and Reject button -->
+                    <a *ngIf="result.status.requestStatus==='requested' && result.status.recipientId===userInfo.userId" class="btn btn-success text-white" (click)="acceptFriendRequest(result.userId,i)">Accept</a>&nbsp;&nbsp;
+                    <a *ngIf="result.status.requestStatus==='requested' && result.status.recipientId===userInfo.userId" class="btn btn-danger text-white" (click)="rejectFriendRequest(result.userId,i)">Reject</a>
+                    <!-- if status is accepted then show 'Friends' -->
+                    <a *ngIf="result.status.requestStatus==='accepted'" class="btn btn-white text-dark border border-dark">Friends</a>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w-100"></div>
+                <div class="col w-100 text-center" style="cursor:pointer;" (click)="loadMoreUsers=loadMoreUsers+10;" *ngIf="results.length>loadMoreUsers">See More</div>
+            </div>
+            <div *ngIf="!search && notifications" class="row">
+              <div *ngFor="let notification of notifications; let i =index;" class="bg-white w-100 d-flex align-items-center notification" (click)="redirectToProfile(notification.profileId)">
+                <div class="col w-100" [innerHTML]="notification.description"></div>
+              </div>
+              <div class="w-100"></div>
+                <div class="col w-100 text-center" style="cursor:pointer; padding-bottom: 15px;" (click)="loadMoreNotifications()" *ngIf="notifications.length>=10">See More</div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
